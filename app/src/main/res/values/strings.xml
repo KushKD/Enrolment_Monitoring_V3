@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Enrolment Reporting</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_end_screen">EndScreen</string>
+    <string name="title_activity_home">Home</string>
+
+    <string-array name="Issue_Type">
+        <item>No Issues</item>
+        <item>Electricity/Power Faliure</item>
+        <item>Internet Issue</item>
+        <item>Technical Issue</item>
+        <item>No Crowd</item>
+        <item>Engaged in Meeting/Workshop/Trainning</item>
+        <item>Others</item>
+    </string-array>
+</resources>
