@@ -119,6 +119,9 @@ public class MainActivity extends Activity implements AsyncTaskListener {
 
     private void getdata() {
 
+        //Refresh Time
+        Time_Async TA = new Time_Async();
+        TA.execute();
 
         deviceID = textView_IMEI.getText().toString().trim();
         Log.e("deviceID",deviceID);
@@ -168,9 +171,7 @@ public class MainActivity extends Activity implements AsyncTaskListener {
                            //Add Aadhaar , name,et_enrolmentstationid,updations,
                            db.addContact(aadhaar_operator);
                            clearData();
-                           //Refresh Time
-                           Time_Async TA = new Time_Async();
-                           TA.execute();
+
                            CM.showDialog(MainActivity.this,"Data Saved Locally");
                        }catch(Exception e){
                            CM.showDialog(MainActivity.this,"Unable to Save Data. Something went wrong. Please restrat the application.");
@@ -179,7 +180,7 @@ public class MainActivity extends Activity implements AsyncTaskListener {
                        if(AppStatus.getInstance(MainActivity.this).isOnline()) {
                            // PostData pd = new PostData();
                            // pd.execute(aanganwadi_Name, phoneNumber, totalEnrollments, issuesNfeedbacks, date, deviceID);
-                           String URL = Constants.URL_BASE;
+                          // String URL = Constants.URL_BASE;
                            new Generic_Async_Post(MainActivity.this, MainActivity.this, TaskType.SAVEDATA).execute(aadhaar_operator);
 
                            //Post Data
@@ -203,16 +204,17 @@ public class MainActivity extends Activity implements AsyncTaskListener {
         button_submit = (Button)findViewById(R.id.bt_submit_data);
             L_Header = (LinearLayout)findViewById(R.id.header);
         editText_Aanganwadi_name = (Spinner) findViewById(R.id.et_aanganwadi_center_name);
-            spinner_enrolment_type = (Spinner)findViewById(R.id.sp_enrolment_type);
         editText_phone_no = (EditText)findViewById(R.id.et_phone_number);
         editText_total_enrollments = (EditText)findViewById(R.id.et_total_number_of_enrollments);
+            editText_name_operator = (EditText)findViewById(R.id.et_name);
+            editText_et_enrolmentstationid = (EditText)findViewById(R.id.et_enrolmentstationid);
+            editText_et_updations = (EditText)findViewById(R.id.et_updations);
         sp_issuesNfeedbacks = (Spinner)findViewById(R.id.et_issuesnfeedbacks);
+            spinner_enrolment_type = (Spinner)findViewById(R.id.sp_enrolment_type);
         textView_Aanganwari = (TextView)findViewById(R.id.et_aanganwadi_date);
         textView_IMEI = (TextView)findViewById(R.id.et_aanganwadi_IMEI);
        textView_Aadhaar = (TextView)findViewById(R.id.tv_Aadhaar);
-        editText_name_operator = (EditText)findViewById(R.id.et_name);
-         editText_et_enrolmentstationid = (EditText)findViewById(R.id.et_enrolmentstationid);
-         editText_et_updations = (EditText)findViewById(R.id.et_updations);
+
 
         return true;
         }catch (Exception e){
@@ -224,6 +226,20 @@ public class MainActivity extends Activity implements AsyncTaskListener {
     @Override
     public void onTaskCompleted(String result, TaskType taskType) {
 
+        String finalResult = null;
+        if(taskType == TaskType.SAVEDATA){
+            JsonParser JP = new JsonParser();
+            finalResult = JP.POST(result);
+            if(finalResult.equalsIgnoreCase(Constants.Login_Success)){
+                CM.showDialog(MainActivity.this,finalResult);
+            }
+            else{
+                CM.showDialog(MainActivity.this,finalResult);
+            }
+        }else{
+            CM.showDialog(MainActivity.this,result);
+        }
+
     }
 
 
@@ -231,6 +247,9 @@ public class MainActivity extends Activity implements AsyncTaskListener {
     private void clearData() {
         editText_total_enrollments.setText("");
         editText_phone_no.setText("");
+        editText_name_operator.setText("");
+        editText_et_enrolmentstationid.setText("");
+        editText_et_updations.setText("");
     }
 
 

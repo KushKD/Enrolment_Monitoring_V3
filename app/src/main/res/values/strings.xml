@@ -19,7 +19,6 @@
     </string-array>
 
 
-
     <string-array name="Center_Name">
         <item>Permanent Enrolment Center</item>
         <item>CSC</item>
@@ -39,4 +38,8 @@
         <item>ALBR</item>
         <item>UPDATION</item>
     </string-array>
+    <string name="title_activity_main__navigation_">Main_Navigation_Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

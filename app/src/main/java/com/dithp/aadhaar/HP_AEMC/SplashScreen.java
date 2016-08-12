@@ -46,7 +46,7 @@ public class SplashScreen extends Activity {
                 {
 
                     //Parking_Details_Activity
-                    Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
+                    Intent mainIntent = new Intent(SplashScreen.this, Main_Navigation_Activity.class);
                     mainIntent.putExtra("Color",  Color );
                     SplashScreen.this.startActivity(mainIntent);
                     SplashScreen.this.finish();

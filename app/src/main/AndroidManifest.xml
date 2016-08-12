@@ -15,7 +15,7 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.dithp.aadhaar.HP_AEMC.SplashScreen"
+            android:name=".SplashScreen"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,18 +25,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.dithp.aadhaar.HP_AEMC.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.dithp.aadhaar.HP_AEMC.Login"
-            android:launchMode="singleInstance"
+            android:name=".Login"
             android:alwaysRetainTaskState="true"
-            android:screenOrientation="portrait"></activity>
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.dithp.aadhaar.HP_AEMC.Home"
+            android:name=".Home"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Main_Navigation_Activity"
+            android:label="@string/title_activity_main__navigation_"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

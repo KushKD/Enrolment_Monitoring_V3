@@ -220,7 +220,7 @@ if(AppStatus.getInstance(Login.this).isOnline()){
 
                 // Commit the edits!
                 editor.commit();
-                Intent i = new Intent(Login.this,MainActivity.class);
+                Intent i = new Intent(Login.this,Main_Navigation_Activity.class);
                 i.putExtra("Color",  HeaderColor );
                 startActivity(i);
                 Login.this.finish();

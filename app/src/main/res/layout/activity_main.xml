@@ -290,7 +290,8 @@
                     android:id="@+id/et_updations"
                     android:layout_width="match_parent"
                     android:textColor="#990000"
-
+                    android:inputType="number"
+                    android:maxLength="3"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
