@@ -105,7 +105,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Date:-"
+                    android:text="Date:"
                     android:layout_width="match_parent"
                     android:textColor="#000000"
                     android:textSize="16sp"
@@ -128,7 +128,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Aadhaar Number"
+                    android:text="Aadhaar Number:"
                     android:layout_width="match_parent"
                     android:textSize="16sp"
                     android:textColor="#000000"
@@ -151,7 +151,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Name"
+                    android:text="Name:"
                     android:layout_width="match_parent"
                     android:textSize="16sp"
                     android:textColor="#000000"
@@ -175,7 +175,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Mobile Number"
+                    android:text="Mobile Number:"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
@@ -202,7 +202,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Enrolment Station Code"
+                    android:text="Enrolment Station Code:"
                     android:layout_width="match_parent"
                     android:textSize="16sp"
                     android:textColor="#000000"
@@ -233,19 +233,41 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="PEC/ CSC/ Anganwadi/ PHC/CHC/RH/ZH Center Name"
+                    android:text="Select type of Enrolment Center:"
                     android:layout_width="match_parent"
                     android:textSize="16sp"
                     android:textColor="#000000"
                     android:textStyle="bold"
                     android:layout_height="wrap_content" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/et_aanganwadi_center_name"
                     android:layout_width="match_parent"
-                    android:textColor="#990000"
+                    android:entries="@array/Center_Name"
+                    android:layout_height="100dp" />
+            </LinearLayout>
 
+            <!-- Type Of Enrolment -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Select type of Enrolment:"
+                    android:layout_width="match_parent"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/sp_enrolment_type"
+                    android:layout_width="match_parent"
+                    android:entries="@array/Enrolment_Type"
+                    android:layout_height="100dp" />
             </LinearLayout>
 
             <!-- Updations-->
@@ -283,7 +305,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Total Number Of Enrolments"
+                    android:text="Total Number Of Enrolments:"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#000000"
@@ -308,7 +330,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Issues and Feedbacks"
+                    android:text="Issues and Feedbacks:"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#000000"

@@ -3,6 +3,7 @@ package com.dithp.aadhaar.Utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dithp.aadhaar.Enum.TaskType;
 import com.dithp.aadhaar.HTTP.HttpManager;
@@ -40,7 +41,7 @@ public class Generic_Async_Get extends AsyncTask<String,Void ,String> {
         try{
             http_manager = new HttpManager();
             Data_From_Server = http_manager.GetData(params[0]);
-
+            Log.e("Data From Server",Data_From_Server);
             return Data_From_Server;
         }catch(Exception e){
             return e.getLocalizedMessage().toString().trim();

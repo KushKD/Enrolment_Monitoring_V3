@@ -3,6 +3,7 @@ package com.dithp.aadhaar.HP_AEMC;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,10 +19,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dithp.aadhaar.Enum.TaskType;
 import com.dithp.aadhaar.HelperFunctions.AppStatus;
 import com.dithp.aadhaar.HelperFunctions.Date_Time;
+import com.dithp.aadhaar.Interfaces.AsyncTaskListener;
+import com.dithp.aadhaar.Modals.Aadhaar_Operator;
 import com.dithp.aadhaar.Presentation.Custom_Dialog;
 import com.dithp.aadhaar.Utils.Constants;
+import com.dithp.aadhaar.Utils.Generic_Async_Post;
 
 import org.json.JSONException;
 import org.json.JSONStringer;
@@ -38,13 +43,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements AsyncTaskListener {
 
    private Button button_submit;
-   private EditText editText_Aanganwadi_name, editText_phone_no, editText_total_enrollments, editText_name_operator,editText_et_enrolmentstationid,editText_et_updations;
+   private EditText editText_phone_no, editText_total_enrollments, editText_name_operator,editText_et_enrolmentstationid,editText_et_updations;
     private TextView textView_Aanganwari , textView_IMEI, textView_Aadhaar;
-    private String aanganwadi_Name,updations, phoneNumber,totalEnrollments ,issuesNfeedbacks,name_operator,enrolment_Station_code, date,aadhaar_number, deviceID = null;
-    private Spinner sp_issuesNfeedbacks;
+    private String aanganwadi_Name,updations,enrolment_type, phoneNumber,totalEnrollments ,issuesNfeedbacks,name_operator,enrolment_Station_code, date,aadhaar_number, deviceID = null;
+    private Spinner sp_issuesNfeedbacks ,editText_Aanganwadi_name, spinner_enrolment_type;
     private int backButtonCount = 0;
     LinearLayout L_Header;
     String HeaderColor;
@@ -53,6 +58,8 @@ public class MainActivity extends Activity {
     StringBuilder sb = new StringBuilder();
     Boolean Flag_Initialize = false;
     Custom_Dialog CM = new Custom_Dialog();
+
+    String Aadhaar = null;
 
     @Override
     public void onBackPressed()
@@ -75,6 +82,13 @@ public class MainActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         HeaderColor = bundle.getString("Color");
 
+        SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0);
+        //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+        //   boolean hasParkingSelected_ = settings.getBoolean("hasParkingSelected", false);
+       // boolean has_Logged_IN = settings.getBoolean("hasLoggedIn",false);
+       // String Color = settings.getString("Header_Color","#000000");
+         Aadhaar = settings.getString("Aadhaar_Number","000000000000");
+
 
          Flag_Initialize = InitializeControls();
 
@@ -83,6 +97,7 @@ public class MainActivity extends Activity {
             button_submit.setBackgroundColor(Color.parseColor(HeaderColor));
 
             textView_Aanganwari.setText(Date_Time.Datetime());
+            textView_Aadhaar.setText(Aadhaar);
             TelephonyManager telephonyManager = (TelephonyManager)getSystemService(MainActivity.TELEPHONY_SERVICE);
             String deviceIDGetting =telephonyManager.getDeviceId();
             textView_IMEI.setText(deviceIDGetting);
@@ -93,7 +108,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            editText_Aanganwadi_name.requestFocus();
+          //  editText_Aanganwadi_name.requestFocus();
 
         }else{
             Toast.makeText(getApplicationContext(),Constants.Error1,Toast.LENGTH_LONG).show();
@@ -106,26 +121,52 @@ public class MainActivity extends Activity {
 
 
         deviceID = textView_IMEI.getText().toString().trim();
+        Log.e("deviceID",deviceID);
         date = textView_Aanganwari.getText().toString().trim();
+        Log.e("date",date);
         aadhaar_number = textView_Aadhaar.getText().toString().trim();
+        Log.e("aadhaar_number",aadhaar_number);
         name_operator = editText_name_operator.getText().toString().trim();
+        Log.e("Name Operator",name_operator);
         phoneNumber = editText_phone_no.getText().toString().trim();
+        Log.e("Phone Operator",phoneNumber);
         enrolment_Station_code = editText_et_enrolmentstationid.getText().toString();
-        aanganwadi_Name = editText_Aanganwadi_name.getText().toString().trim();
+        Log.e("Station Code",enrolment_Station_code);
+        aanganwadi_Name = editText_Aanganwadi_name.getSelectedItem().toString().trim();
+        Log.e("Anganwadi Name",aanganwadi_Name);
+        enrolment_type = spinner_enrolment_type.getSelectedItem().toString().trim();
+        Log.e("enrolment_type",enrolment_type);
         totalEnrollments =editText_total_enrollments.getText().toString().trim();
+        Log.e("totalEnrollments",totalEnrollments);
         updations = editText_et_updations.getText().toString().trim();
+        Log.e("updations",updations);
         issuesNfeedbacks = sp_issuesNfeedbacks.getSelectedItem().toString().trim();
+        Log.e("issuesNfeedbacks",issuesNfeedbacks);
 
-
-       if(enrolment_Station_code.length() !=5){
+        Aadhaar_Operator aadhaar_operator = null;
+       if(enrolment_Station_code.length() ==5){
            if(phoneNumber.length()!=0){
                if(phoneNumber.length()== 10) {
                    if(totalEnrollments.length()!=0) {
                        //Save Data Locally
                        try {
                            DatabaseHandler db = new DatabaseHandler(this);
+
+                           aadhaar_operator = new Aadhaar_Operator();
+                           aadhaar_operator.setTab_IMEI(deviceID);
+                           aadhaar_operator.setDate(date);
+                           aadhaar_operator.setAadhaar_No(aadhaar_number);
+                           aadhaar_operator.setName(name_operator);
+                           aadhaar_operator.setMobile_No(phoneNumber);
+                           aadhaar_operator.setEnrolment_Station_ID(enrolment_Station_code);
+                           aadhaar_operator.setAww_Pec_Mec_Phc_Chc_Rh_Zh_Name(aanganwadi_Name);
+                           aadhaar_operator.setUpdations_Done(updations);
+                           aadhaar_operator.setEnrolments_Done(totalEnrollments);
+                           aadhaar_operator.setIssuesnFeedbacks(issuesNfeedbacks);
+                           aadhaar_operator.setLatitude(issuesNfeedbacks);
+                           aadhaar_operator.setLongitude(issuesNfeedbacks);
                            //Add Aadhaar , name,et_enrolmentstationid,updations,
-                           db.addContact(aanganwadi_Name, phoneNumber, totalEnrollments, issuesNfeedbacks, date, deviceID);
+                           db.addContact(aadhaar_operator);
                            clearData();
                            //Refresh Time
                            Time_Async TA = new Time_Async();
@@ -138,6 +179,8 @@ public class MainActivity extends Activity {
                        if(AppStatus.getInstance(MainActivity.this).isOnline()) {
                            // PostData pd = new PostData();
                            // pd.execute(aanganwadi_Name, phoneNumber, totalEnrollments, issuesNfeedbacks, date, deviceID);
+                           String URL = Constants.URL_BASE;
+                           new Generic_Async_Post(MainActivity.this, MainActivity.this, TaskType.SAVEDATA).execute(aadhaar_operator);
 
                            //Post Data
                        }else CM.showDialog(MainActivity.this,"Network isn't available");
@@ -159,7 +202,8 @@ public class MainActivity extends Activity {
         try{
         button_submit = (Button)findViewById(R.id.bt_submit_data);
             L_Header = (LinearLayout)findViewById(R.id.header);
-        editText_Aanganwadi_name = (EditText)findViewById(R.id.et_aanganwadi_center_name);
+        editText_Aanganwadi_name = (Spinner) findViewById(R.id.et_aanganwadi_center_name);
+            spinner_enrolment_type = (Spinner)findViewById(R.id.sp_enrolment_type);
         editText_phone_no = (EditText)findViewById(R.id.et_phone_number);
         editText_total_enrollments = (EditText)findViewById(R.id.et_total_number_of_enrollments);
         sp_issuesNfeedbacks = (Spinner)findViewById(R.id.et_issuesnfeedbacks);
@@ -177,106 +221,15 @@ public class MainActivity extends Activity {
         }
     }
 
-    public class PostData extends AsyncTask<String,String,String>{
+    @Override
+    public void onTaskCompleted(String result, TaskType taskType) {
 
-        private ProgressDialog dialog;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            dialog = new ProgressDialog(MainActivity.this);
-            dialog.setMessage(Constants.SERVER_MESSAGE);
-            dialog.show();
-            dialog.setCancelable(false);
-        }
-
-        @Override
-        protected String doInBackground(String... param) {
-            try {
-                url=new URL(Constants.URL_BASE);
-                conn = (HttpURLConnection)url.openConnection();
-                conn.setDoOutput(true);
-                conn.setRequestMethod("POST");
-                conn.setUseCaches(false);
-                conn.setConnectTimeout(10000);
-                conn.setReadTimeout(10000);
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.connect();
-
-                JSONStringer userJson = new JSONStringer()
-                        .object().key("aww_user_details")
-                        .object()
-                        .key("Aanganwadi_Name").value(param[0])
-                        .key("PhoneNumber").value(param[1])
-                        .key("TotalEnrollments").value(param[2])
-                        .key("Issues_Feedbacks").value(param[3])
-                        .key("EntryDate").value(param[4])
-                        .key("IMEINo").value(param[5])
-                        .endObject()
-                        .endObject();
-
-
-
-               System.out.println(userJson.toString());
-                OutputStreamWriter out = new   OutputStreamWriter(conn.getOutputStream());
-                out.write(userJson.toString());
-                out.close();
-
-                int HttpResult =conn.getResponseCode();
-                if(HttpResult ==HttpURLConnection.HTTP_OK){
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));
-                    String line = null;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    br.close();
-
-
-                }else{
-                    System.out.println(conn.getResponseMessage());
-                }
-
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }finally{
-                if(conn!=null)
-                    conn.disconnect();
-            }
-            return sb.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            JsonParser JP = new JsonParser();
-            String finalResult = JP.POST(result);
-
-            if(finalResult.equals(Constants.DATASENT)){
-                clearData();
-            dialog.dismiss();
-            Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(MainActivity.this,Home.class);
-                startActivity(i);
-                MainActivity.this.finish();
-            }
-            else{
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_SHORT).show();
-            }
-
-        }
     }
 
+
+
     private void clearData() {
-      //  editText_issues.setText("");
         editText_total_enrollments.setText("");
-        editText_Aanganwadi_name.setText("");
         editText_phone_no.setText("");
     }
 

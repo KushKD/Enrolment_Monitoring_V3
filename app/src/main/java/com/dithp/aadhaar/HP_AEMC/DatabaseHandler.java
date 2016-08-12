@@ -11,6 +11,8 @@ package com.dithp.aadhaar.HP_AEMC;
   import android.os.Environment;
   import android.util.Log;
 
+  import com.dithp.aadhaar.Modals.Aadhaar_Operator;
+
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     boolean bool = false;
@@ -66,16 +68,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * All CRUD(Create, Read, Update, Delete) Operations
      */
 
-    void addContact(String aanganwadi_Name ,String phoneNumber, String totalEnrollments, String issuesNfeedbacks, String date ,String deviceID) {
+    void addContact(Aadhaar_Operator AO) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(ANGANWARI_NAME, aanganwadi_Name); // Contact Name
-        values.put(KEY_PH_NO, phoneNumber); // Contact Phone
-        values.put(TOTAL_ENROLLMENTS,totalEnrollments); //Total Enrollments
-        values.put(ISSUESnFEEDBACKS,issuesNfeedbacks); //Issues n feedbacks
-        values.put(DATE,date); //DATE
-        values.put(DEVICE_ID,deviceID);
+        values.put(ANGANWARI_NAME, AO.getAww_Pec_Mec_Phc_Chc_Rh_Zh_Name()); // Contact Name
+        values.put(KEY_PH_NO, AO.getMobile_No()); // Contact Phone
+        values.put(TOTAL_ENROLLMENTS,AO.getEnrolments_Done()); //Total Enrollments
+        values.put(ISSUESnFEEDBACKS,AO.getIssuesnFeedbacks()); //Issues n feedbacks
+        values.put(DATE,AO.getDate()); //DATE
+        values.put(DEVICE_ID,AO.getTab_IMEI());
 
         // Inserting Row
         db.insert(TABLE_REPORTING, null, values);

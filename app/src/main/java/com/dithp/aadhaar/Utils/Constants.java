@@ -28,5 +28,6 @@ public class Constants {
     public static final String Enroll = "Please Enter the total no of enrollments done today ";
     public static final String PError1 = "Enter a Valid 10 Digit Mobile Number";
     public static final String PError2 = "Please Enter Your Phone Number";
+    public static final String PREF_NAME = "AWW_Data";
 
 }

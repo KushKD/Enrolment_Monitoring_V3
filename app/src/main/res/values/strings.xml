@@ -17,4 +17,26 @@
         <item>Engaged in Meeting/Workshop/Trainning</item>
         <item>Others</item>
     </string-array>
+
+
+
+    <string-array name="Center_Name">
+        <item>Permanent Enrolment Center</item>
+        <item>CSC</item>
+        <item>Anganwadi Enrolment</item>
+        <item>Mobile Enrolment Center</item>
+        <item>Primary Health Centre (PHCs)</item>
+        <item>Community Health Centres (CHCs)</item>
+        <item>Regional Hospital RH</item>
+        <item>Zonal Hospital ZH</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="Enrolment_Type">
+        <item>ECMP</item>
+        <item>CSC</item>
+        <item>CELC</item>
+        <item>ALBR</item>
+        <item>UPDATION</item>
+    </string-array>
 </resources>

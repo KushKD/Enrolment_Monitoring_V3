@@ -11,7 +11,7 @@ import com.dithp.aadhaar.Interfaces.AsyncTaskListener;
 /**
  * Created by kuush on 8/11/2016.
  */
-public class Generic_Async_Post extends AsyncTask<String,Void ,String> {
+public class Generic_Async_Post extends AsyncTask<Object,Void ,String> {
 
 
     String outputStr;
@@ -34,32 +34,16 @@ public class Generic_Async_Post extends AsyncTask<String,Void ,String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(Object... params) {
         String Data_From_Server = null;
         HttpManager http_manager = null;
-        try{
+
             http_manager = new HttpManager();
-            if(params[0].equalsIgnoreCase("getParkingTransaction_JSON")){
-                Data_From_Server = http_manager.PostData_Vehicle_IN(params);
-                return Data_From_Server;
-            }else if(params[0].equalsIgnoreCase("getParkingOut_JSON")){
-                Data_From_Server = http_manager.PostData_Vehicle_OUT(params);
-                return Data_From_Server;
-            }else if(params[0].equalsIgnoreCase("getConfirmPayment_JSON")){
-                Data_From_Server = http_manager.PostData_Vehicle_OUT_Confirm(params);
-                return Data_From_Server;
-            }else if(params[0].equalsIgnoreCase("getConfirmParkinStatus_JSON")){
-                Data_From_Server = http_manager.PostData_Vehicle_OUT_Confirm(params);
-                return Data_From_Server;
-            }
 
-            else{
-                return "Error";
-            }
+                Data_From_Server = http_manager.PostData_SaveData(params[0]);
+                return Data_From_Server;
 
-        }catch(Exception e){
-            return e.getLocalizedMessage().toString().trim();
-        }
+
 
     }
 

@@ -3,11 +3,13 @@ package com.dithp.aadhaar.HP_AEMC;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -132,7 +134,8 @@ public class Login extends Activity implements AsyncTaskListener {
                     sb.append(Constants.url_Delemetre);
                     sb.append(otp);
                     url2 = sb.toString();
-                    new Generic_Async_Get(Login.this, Login.this, TaskType.USER_LOGIN).execute(url2);
+                    Log.e("OTP URL",url2);
+                    new Generic_Async_Get(Login.this, Login.this, TaskType.OTP_USER).execute(url2);
                  } else {
                     CM.showDialog(Login.this,"Network isn't available");
 
@@ -164,10 +167,7 @@ if(AppStatus.getInstance(Login.this).isOnline()){
     new Generic_Async_Get(Login.this, Login.this, TaskType.USER_LOGIN).execute(url);
      }
              else CM.showDialog(Login.this,"Network isn't available");
-
-
-            }else CM.showDialog(Login.this,Constants.AError1);
-
+        }else CM.showDialog(Login.this,Constants.AError1);
         }else CM.showDialog(Login.this,Constants.AError2);
     }
 
@@ -198,25 +198,37 @@ if(AppStatus.getInstance(Login.this).isOnline()){
                 CM.showDialog(Login.this,finalResult);
                 editText_aadhaarLogin.setEnabled(false);
                 editText_otpLogin.setEnabled(true);
-            }else if(taskType == TaskType.OTP_USER){
-
-                JsonParser JP2 = new JsonParser();
-                 finalResult = JP2.ParseStringOTP(result);
-                if(finalResult.equalsIgnoreCase(Constants.OTP_Successfull)){
-                    Intent i = new Intent(Login.this,MainActivity.class);
-                    i.putExtra("Color",  HeaderColor );
-                    startActivity(i);
-                    Login.this.finish();
-                } else{
-                   CM.showDialog(Login.this,finalResult);
-                }
             }
             else{
                 CM.showDialog(Login.this,finalResult);
             }
 
-        }else{
+        }else if(taskType == TaskType.OTP_USER){
 
+
+            JsonParser JP2 = new JsonParser();
+            finalResult = JP2.ParseStringOTP(result);
+            if(finalResult.equalsIgnoreCase(Constants.OTP_Successfull)){
+                //Shared Prefrence
+                SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0); // 0 - for private mode
+                SharedPreferences.Editor editor = settings.edit();
+                //Set "hasLoggedIn" to true
+                editor.putBoolean("hasLoggedIn", true);
+                editor.putString("Aadhaar_Number",aadhaar);
+                editor.putString("Header_Color",HeaderColor);
+                editor.putString("Header_Text",HeaderText);
+
+                // Commit the edits!
+                editor.commit();
+                Intent i = new Intent(Login.this,MainActivity.class);
+                i.putExtra("Color",  HeaderColor );
+                startActivity(i);
+                Login.this.finish();
+            } else{
+                CM.showDialog(Login.this,finalResult);
+            }
+        }else{
+            CM.showDialog(Login.this,"Something went wrong");
         }
     }
 
