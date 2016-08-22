@@ -163,11 +163,11 @@ public class Main_Navigation_Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+       /* if (id == R.id.nav_camera) {
             Toast.makeText(getApplicationContext(),"User profile will be available soon.",Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_gallery) {
             Toast.makeText(getApplicationContext(),"Reports Coming soon.",Toast.LENGTH_LONG).show();
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

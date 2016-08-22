@@ -101,7 +101,7 @@ public class Home extends Activity {
             /**
              * PHC/CHC Button Click
              */
-            bt_phc_chc.setOnClickListener(new View.OnClickListener() {
+          /*  bt_phc_chc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Header = "#666666";
@@ -115,12 +115,12 @@ public class Home extends Activity {
                     startActivity(intent);
                     Home.this.finish();
                 }
-            });
+            });*/
 
             /**
              * RH_ZH
              */
-        bt_rh_zh.setOnClickListener(new View.OnClickListener() {
+      /*  bt_rh_zh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Header = "#695871";
@@ -134,12 +134,12 @@ public class Home extends Activity {
                 startActivity(intent);
                 Home.this.finish();
             }
-        });
+        });*/
 
             /**
              * MEC
              */
-        bt_mobile.setOnClickListener(new View.OnClickListener() {
+      /*  bt_mobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Header = "#52715e";
@@ -153,7 +153,7 @@ public class Home extends Activity {
                 startActivity(intent);
                 Home.this.finish();
             }
-        });
+        });*/
 
 
 
@@ -237,9 +237,9 @@ public class Home extends Activity {
             bt_Csc = (LinearLayout)findViewById(R.id.csc_click);
             bt_Aww = (LinearLayout)findViewById(R.id.aww_click);
             bt_Pec = (LinearLayout)findViewById(R.id.pec_click);
-            bt_rh_zh = (LinearLayout)findViewById(R.id.rh_zh_click);
-            bt_phc_chc = (LinearLayout)findViewById(R.id.phc_chc_click);
-            bt_mobile = (LinearLayout)findViewById(R.id.mobile_enrolment_center);
+          //  bt_rh_zh = (LinearLayout)findViewById(R.id.rh_zh_click);
+          //  bt_phc_chc = (LinearLayout)findViewById(R.id.phc_chc_click);
+           // bt_mobile = (LinearLayout)findViewById(R.id.mobile_enrolment_center);
             return true;
         }catch(Exception e){
             return false;
