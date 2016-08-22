@@ -65,6 +65,16 @@ public class Main_Navigation_Activity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__navigation_);
+
+        Bundle bundle = getIntent().getExtras();
+        HeaderColor = bundle.getString("Color");
+
+        SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0);
+        //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+        //   boolean hasParkingSelected_ = settings.getBoolean("hasParkingSelected", false);
+        // boolean has_Logged_IN = settings.getBoolean("hasLoggedIn",false);
+        // String Color = settings.getString("Header_Color","#000000");
+        Aadhaar = settings.getString("Aadhaar_Number","000000000000");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -79,15 +89,16 @@ public class Main_Navigation_Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Bundle bundle = getIntent().getExtras();
-        HeaderColor = bundle.getString("Color");
+        View header=navigationView.getHeaderView(0);
 
-        SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0);
-        //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-        //   boolean hasParkingSelected_ = settings.getBoolean("hasParkingSelected", false);
-        // boolean has_Logged_IN = settings.getBoolean("hasLoggedIn",false);
-        // String Color = settings.getString("Header_Color","#000000");
-        Aadhaar = settings.getString("Aadhaar_Number","000000000000");
+        /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+
+        TextView Name_Manager_Tv = (TextView)header .findViewById(R.id.name);
+        TextView Aadhaar_Manager_Tv = (TextView)header .findViewById(R.id.aadhaar);
+        // Name_Manager_Tv.setText(name);
+        Aadhaar_Manager_Tv.setText(Aadhaar);
+
+
 
         Flag_Initialize = InitializeControls();
 
@@ -153,17 +164,9 @@ public class Main_Navigation_Activity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Toast.makeText(getApplicationContext(),"User profile will be available soon.",Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            Toast.makeText(getApplicationContext(),"Reports Coming soon.",Toast.LENGTH_LONG).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -219,8 +222,8 @@ public class Main_Navigation_Activity extends AppCompatActivity
                             aadhaar_operator.setUpdations_Done(updations);
                             aadhaar_operator.setEnrolments_Done(totalEnrollments);
                             aadhaar_operator.setIssuesnFeedbacks(issuesNfeedbacks);
-                            aadhaar_operator.setLatitude(issuesNfeedbacks);
-                            aadhaar_operator.setLongitude(issuesNfeedbacks);
+                            aadhaar_operator.setLatitude("0");
+                            aadhaar_operator.setLongitude("0");
                             //Add Aadhaar , name,et_enrolmentstationid,updations,
                             db.addContact(aadhaar_operator);
                             clearData();

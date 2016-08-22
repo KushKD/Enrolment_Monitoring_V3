@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class Home extends Activity {
 
     //Permision code that will be checked in the method onRequestPermissionsResult
     private int READ_STATE_PHONE = 23;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +165,8 @@ public class Home extends Activity {
         //First checking if the app is already having the permission
         if(isReadStorageAllowed()){
             //If permission is already having then showing the toast
-            Toast.makeText(Home.this,"You already have the permission",Toast.LENGTH_LONG).show();
+            Toast.makeText(Home.this,"You already have the STORAGE permission",Toast.LENGTH_LONG).show();
+           // Toast.makeText(Home.this,"You already have the GPS permission",Toast.LENGTH_LONG).show();
             //Existing the method with return
             return;
         }
@@ -172,7 +175,11 @@ public class Home extends Activity {
         requestStoragePermission();
 
 
+
+
     }
+
+
 
     private void requestStoragePermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_PHONE_STATE)){
@@ -196,12 +203,13 @@ public class Home extends Activity {
             if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
                 //Displaying a toast
-                Toast.makeText(this,"Permission granted ",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Storage Permission granted ",Toast.LENGTH_LONG).show();
             }else{
                 //Displaying another toast if permission is not granted
-                Toast.makeText(this,"Oops you just denied the permission",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Oops you just denied the Storage permission",Toast.LENGTH_LONG).show();
             }
         }
+
     }
 
     //We are calling this method to check the permission status
@@ -216,6 +224,8 @@ public class Home extends Activity {
         //If permission is not granted returning false
         return false;
     }
+
+
 
     /**
      * Initialize the Layout
