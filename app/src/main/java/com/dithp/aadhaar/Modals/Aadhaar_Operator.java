@@ -8,8 +8,7 @@ import java.io.Serializable;
 public class Aadhaar_Operator implements Serializable {
 
 
-    public String Name;
-    public String Aadhaar_No;
+
 
     public String getEnrolment_Type() {
         return Enrolment_Type;
@@ -19,26 +18,9 @@ public class Aadhaar_Operator implements Serializable {
         Enrolment_Type = enrolment_Type;
     }
 
-    public String Enrolment_Type;
 
-    public String getLatitude() {
-        return Latitude;
-    }
 
-    public void setLatitude(String latitude) {
-        Latitude = latitude;
-    }
 
-    public String getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        Longitude = longitude;
-    }
-
-    public String Latitude;
-    public String Longitude;
 
     public String getIssuesnFeedbacks() {
         return IssuesnFeedbacks;
@@ -48,7 +30,7 @@ public class Aadhaar_Operator implements Serializable {
         IssuesnFeedbacks = issuesnFeedbacks;
     }
 
-    public String IssuesnFeedbacks;
+
 
     public String getMobile_No() {
         return Mobile_No;
@@ -57,8 +39,6 @@ public class Aadhaar_Operator implements Serializable {
     public void setMobile_No(String mobile_No) {
         Mobile_No = mobile_No;
     }
-
-    public String Mobile_No;
 
     public String getTab_IMEI() {
         return Tab_IMEI;
@@ -157,4 +137,9 @@ public class Aadhaar_Operator implements Serializable {
     public String GEO_Lat;
     public String GEO_Long;
     public String Tab_IMEI;
+    public String Name;
+    public String Aadhaar_No;
+    public String IssuesnFeedbacks;
+    public String Mobile_No;
+    public String Enrolment_Type;
 }

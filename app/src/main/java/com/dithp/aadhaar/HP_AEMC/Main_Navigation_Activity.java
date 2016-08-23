@@ -2,11 +2,15 @@ package com.dithp.aadhaar.HP_AEMC;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
@@ -58,6 +62,7 @@ public class Main_Navigation_Activity extends AppCompatActivity
     Custom_Dialog CM = new Custom_Dialog();
 
     String Aadhaar = null;
+    private static final int REQUEST_WRITE_STORAGE = 112;
 
 
 
@@ -65,6 +70,8 @@ public class Main_Navigation_Activity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__navigation_);
+
+
 
         Bundle bundle = getIntent().getExtras();
         HeaderColor = bundle.getString("Color");
@@ -78,7 +85,19 @@ public class Main_Navigation_Activity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(Main_Navigation_Activity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(Main_Navigation_Activity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(Main_Navigation_Activity.this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            } else {
+                //do something
+            }
+        } else {
+            //do something
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -222,8 +241,10 @@ public class Main_Navigation_Activity extends AppCompatActivity
                             aadhaar_operator.setUpdations_Done(updations);
                             aadhaar_operator.setEnrolments_Done(totalEnrollments);
                             aadhaar_operator.setIssuesnFeedbacks(issuesNfeedbacks);
-                            aadhaar_operator.setLatitude("0");
-                            aadhaar_operator.setLongitude("0");
+                            aadhaar_operator.setGEO_Lat("0");
+                            aadhaar_operator.setGEO_Long("0");
+                            aadhaar_operator.setEnrolment_Type(enrolment_type);
+                            aadhaar_operator.setUpload_Status("Testing");
                             //Add Aadhaar , name,et_enrolmentstationid,updations,
                             db.addContact(aadhaar_operator);
                             clearData();
@@ -286,7 +307,7 @@ public class Main_Navigation_Activity extends AppCompatActivity
         if(taskType == TaskType.SAVEDATA){
             JsonParser JP = new JsonParser();
             finalResult = JP.POST(result);
-            if(finalResult.equalsIgnoreCase(Constants.Login_Success)){
+            if(finalResult.equalsIgnoreCase(Constants.DATASENT)){
                 CM.showDialog(Main_Navigation_Activity.this,finalResult);
             }
             else{

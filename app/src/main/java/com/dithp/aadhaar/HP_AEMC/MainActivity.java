@@ -166,9 +166,10 @@ public class MainActivity extends Activity implements AsyncTaskListener {
                            aadhaar_operator.setUpdations_Done(updations);
                            aadhaar_operator.setEnrolments_Done(totalEnrollments);
                            aadhaar_operator.setIssuesnFeedbacks(issuesNfeedbacks);
-                           aadhaar_operator.setLatitude(issuesNfeedbacks);
-                           aadhaar_operator.setLongitude(issuesNfeedbacks);
-                           //Add Aadhaar , name,et_enrolmentstationid,updations,
+                           aadhaar_operator.setGEO_Lat("0");
+                           aadhaar_operator.setGEO_Long("0");
+                           aadhaar_operator.setEnrolment_Type(enrolment_type);
+                           aadhaar_operator.setUpload_Status("Testing");
                            db.addContact(aadhaar_operator);
                            clearData();
 

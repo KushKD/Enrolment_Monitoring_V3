@@ -1,5 +1,7 @@
 package com.dithp.aadhaar.HTTP;
 
+import android.util.Log;
+
 import com.dithp.aadhaar.Modals.Aadhaar_Operator;
 import com.dithp.aadhaar.Utils.Constants;
 
@@ -82,18 +84,26 @@ public class HttpManager {
              userJson = new JSONStringer()
                     .object().key("aww_user_details")
                     .object()
-                    .key("Aanganwadi_Name").value(AO.getAww_Pec_Mec_Phc_Chc_Rh_Zh_Name())
-                    .key("PhoneNumber").value(AO.getMobile_No())
-                    .key("TotalEnrollments").value(AO.getEnrolments_Done())
-                    .key("Issues_Feedbacks").value(AO.getIssuesnFeedbacks())
-                    .key("EntryDate").value(AO.getDate())
-                    .key("IMEINo").value(AO.getTab_IMEI())
-                    .endObject()
+                    .key("Enrolment_Station_ID").value(AO.getEnrolment_Station_ID())
+                    .key("Aww_Pec_Mec_Phc_Chc_Rh_Zh_Name").value(AO.getAww_Pec_Mec_Phc_Chc_Rh_Zh_Name())
+                    .key("Enrolments_Done").value(AO.getEnrolments_Done())
+                    .key("Updations_Done").value(AO.getUpdations_Done())
+                    .key("Upload_Status").value(AO.getUpload_Status())
+                    .key("Date").value(AO.getDate())
+                     .key("GEO_Lat").value("0") //AO.getGEO_Lat()
+                     .key("GEO_Long").value("0")  //AO.getGEO_Lat()
+                     .key("Tab_IMEI").value(AO.getTab_IMEI())
+                     .key("Name").value(AO.getName())
+                     .key("Aadhaar_No").value(AO.getAadhaar_No())
+                     .key("IssuesnFeedbacks").value(AO.getIssuesnFeedbacks())
+                     .key("Mobile_No").value(AO.getMobile_No())
+                     .key("Enrolment_Type").value(AO.getEnrolment_Type())
+                     .endObject()
                     .endObject();
 
 
             //  System.out.println(userJson.toString());
-            //  Log.e("Object",userJson.toString());
+              Log.e("Object",userJson.toString());
             OutputStreamWriter out = new OutputStreamWriter(conn_.getOutputStream());
             out.write(userJson.toString());
             out.close();

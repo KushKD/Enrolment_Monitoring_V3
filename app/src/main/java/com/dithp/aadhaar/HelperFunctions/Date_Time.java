@@ -13,7 +13,7 @@ public class Date_Time {
     {
         Calendar c = Calendar .getInstance();
       //  System.out.println("Current time => "+c.getTime());
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mms");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
 
