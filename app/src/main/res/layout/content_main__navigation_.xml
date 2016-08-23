@@ -270,6 +270,31 @@
                         android:layout_height="100dp" />
                 </LinearLayout>
 
+
+                <!-- Total Number Of Enrolments -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="Total Number Of Enrolments:"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/et_total_number_of_enrollments"
+                        android:layout_width="match_parent"
+                        android:textColor="#990000"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"/>
+                </LinearLayout>
+
                 <!-- Updations-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -297,29 +322,7 @@
 
 
 
-                <!-- Total Number Of Enrolments -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:text="Total Number Of Enrolments:"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#000000"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:id="@+id/et_total_number_of_enrollments"
-                        android:layout_width="match_parent"
-                        android:textColor="#990000"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"/>
-                </LinearLayout>
 
                 <!-- Issues and Feedbacks about the training -->
                 <LinearLayout

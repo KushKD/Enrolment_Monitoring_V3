@@ -21,7 +21,7 @@
 
     <string-array name="Center_Name">
         <item>Permanent Enrolment Center</item>
-        <item>CSC</item>
+        <item>CSC-SPV</item>
         <item>Anganwadi Enrolment</item>
         <item>Mobile Enrolment Center</item>
         <item>Primary Health Centre (PHCs)</item>
@@ -33,7 +33,6 @@
 
     <string-array name="Enrolment_Type">
         <item>ECMP</item>
-        <item>CSC</item>
         <item>CELC</item>
         <item>ALBR</item>
         <item>UPDATION</item>
