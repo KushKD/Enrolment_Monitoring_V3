@@ -3,6 +3,7 @@ package com.dithp.aadhaar.HP_AEMC;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,9 +14,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.dithp.aadhaar.Utils.Constants;
+
 public class Home extends Activity {
 
-    LinearLayout bt_Aww, bt_Pec , bt_Csc, bt_rh_zh, bt_phc_chc, bt_mobile;
+    LinearLayout bt_srdh, bt_Pec ;
     Boolean initialize_layout = false;
 
     String Header = null;
@@ -37,45 +40,49 @@ public class Home extends Activity {
         initialize_layout = Layout_Initialize();
         if(initialize_layout){
 
-            /**
-             * CSC Button Click
-             */
-            bt_Csc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Header = "#9dbda9";
-                   // Color_Button = "";
-                   // Text_Color = "";
-                    HeaderText = "CSC Login";
-
-                    Intent intent = new Intent(Home.this,Login.class);
-                    intent.putExtra("Header", Header);
-                    intent.putExtra("Header_Text", HeaderText);
-                   // intent.putExtra("Text_Color", Text_Color);
-                    startActivity(intent);
-                    Home.this.finish();
-                }
-            });
 
 
             /**
              * Aww Button Click
              */
-             bt_Aww.setOnClickListener(new View.OnClickListener() {
+            bt_srdh.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
 
-                     Header = "#00ad96";
-                     // Color_Button = "";
-                     // Text_Color = "";
-                     HeaderText = "Anganwadi Login";
-                     Intent intent = new Intent(Home.this,Login.class);
-                     intent.putExtra("Header", Header);
-                     intent.putExtra("Header_Text", HeaderText);
-                     // intent.putExtra("Text_Color", Text_Color);
-                     startActivity(intent);
-                     Home.this.finish();
+                     SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0);
+                     //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+                     //   boolean hasParkingSelected_ = settings.getBoolean("hasParkingSelected", false);
+                     boolean has_Logged_IN = settings.getBoolean("hasLoggedIn",false);
+                     String Color = settings.getString("Header_Color","#000000");
+                     String Aadhaar = settings.getString("Aadhaar_Number","000000000000");
+
+                     if(has_Logged_IN)
+                     {
+
+
+
+
+                         Intent intent = new Intent(Home.this,Main_Navigation_Activity.class);
+                         intent.putExtra("Color",  Color );
+                         // intent.putExtra("Text_Color", Text_Color);
+                         startActivity(intent);
+                         //Home.this.finish();
+
+
+
+                     }else{
+                         Header = "#1595a6";
+                         // Color_Button = "";
+                         // Text_Color = "";
+                         HeaderText = "Enrolment Login";
+                         Intent intent = new Intent(Home.this,Login.class);
+                         intent.putExtra("Header", Header);
+                         intent.putExtra("Header_Text", HeaderText);
+                         // intent.putExtra("Text_Color", Text_Color);
+                         startActivity(intent);
+                        // Home.this.finish();
+                     }
+
                  }
              });
 
@@ -85,77 +92,18 @@ public class Home extends Activity {
             bt_Pec.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Header = "#1595a6";
-                    HeaderText = "PEC Login";
+                    Header = "#d52736";
+                    HeaderText = "Aadhaar Search Login";
                     // Color_Button = "";
                     // Text_Color = "";
-                    Intent intent = new Intent(Home.this,Login.class);
+                    Intent intent = new Intent(Home.this,Login2.class);
                     intent.putExtra("Header", Header);
                     intent.putExtra("Header_Text", HeaderText);
-                    // intent.putExtra("Text_Color", Text_Color);
+                     intent.putExtra("Text_Color", Text_Color);
                     startActivity(intent);
-                    Home.this.finish();
+
                 }
             });
-
-            /**
-             * PHC/CHC Button Click
-             */
-          /*  bt_phc_chc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Header = "#666666";
-                    HeaderText = "PHC/CHC Login";
-                    // Color_Button = "";
-                    // Text_Color = "";
-                    Intent intent = new Intent(Home.this,Login.class);
-                    intent.putExtra("Header", Header);
-                    intent.putExtra("Header_Text", HeaderText);
-                    // intent.putExtra("Text_Color", Text_Color);
-                    startActivity(intent);
-                    Home.this.finish();
-                }
-            });*/
-
-            /**
-             * RH_ZH
-             */
-      /*  bt_rh_zh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Header = "#695871";
-                HeaderText = "RH/ZH Login";
-                // Color_Button = "";
-                // Text_Color = "";
-                Intent intent = new Intent(Home.this,Login.class);
-                intent.putExtra("Header", Header);
-                intent.putExtra("Header_Text", HeaderText);
-                // intent.putExtra("Text_Color", Text_Color);
-                startActivity(intent);
-                Home.this.finish();
-            }
-        });*/
-
-            /**
-             * MEC
-             */
-      /*  bt_mobile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Header = "#52715e";
-                HeaderText = "Mobile Enrolment Center Login";
-                // Color_Button = "";
-                // Text_Color = "";
-                Intent intent = new Intent(Home.this,Login.class);
-                intent.putExtra("Header", Header);
-                intent.putExtra("Header_Text", HeaderText);
-                // intent.putExtra("Text_Color", Text_Color);
-                startActivity(intent);
-                Home.this.finish();
-            }
-        });*/
-
-
 
 
         }else{
@@ -234,8 +182,8 @@ public class Home extends Activity {
     private Boolean Layout_Initialize() {
 
         try{
-            bt_Csc = (LinearLayout)findViewById(R.id.csc_click);
-            bt_Aww = (LinearLayout)findViewById(R.id.aww_click);
+
+            bt_srdh = (LinearLayout)findViewById(R.id.srdh_click);
             bt_Pec = (LinearLayout)findViewById(R.id.pec_click);
           //  bt_rh_zh = (LinearLayout)findViewById(R.id.rh_zh_click);
           //  bt_phc_chc = (LinearLayout)findViewById(R.id.phc_chc_click);

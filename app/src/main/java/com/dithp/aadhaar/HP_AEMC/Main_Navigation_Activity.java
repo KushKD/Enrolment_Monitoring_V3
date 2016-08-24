@@ -47,7 +47,7 @@ import java.util.Calendar;
 public class Main_Navigation_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AsyncTaskListener{
 
-    private Button button_submit;
+    private Button button_submit, logout;
     private EditText editText_phone_no, editText_total_enrollments, editText_name_operator,editText_et_enrolmentstationid,editText_et_updations;
     private TextView textView_Aanganwari , textView_IMEI, textView_Aadhaar;
     private String aanganwadi_Name,updations,enrolment_type, phoneNumber,totalEnrollments ,issuesNfeedbacks,name_operator,enrolment_Station_code, date,aadhaar_number, deviceID = null;
@@ -134,6 +134,23 @@ public class Main_Navigation_Activity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     getdata();
+                }
+            });
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Clear the shared prefrences tab
+                    //Shared Prefrence
+                    SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0); // 0 - for private mode
+                    SharedPreferences.Editor editor = settings.edit();
+                    //Set "hasLoggedIn" to true
+                    editor.putBoolean("hasLoggedIn", false);
+                    editor.putString("Aadhaar_Number","000000000000");
+                    editor.putString("Header_Color",HeaderColor);
+                    // Commit the edits!
+                    editor.commit();
+                    //finish the activity
+                    Main_Navigation_Activity.this.finish();
                 }
             });
 
@@ -278,6 +295,7 @@ public class Main_Navigation_Activity extends AppCompatActivity
 
     private Boolean InitializeControls() {
         try{
+            logout = (Button)findViewById(R.id.logout);
             button_submit = (Button)findViewById(R.id.bt_submit_data);
             L_Header = (LinearLayout)findViewById(R.id.header);
             editText_Aanganwadi_name = (Spinner) findViewById(R.id.et_aanganwadi_center_name);

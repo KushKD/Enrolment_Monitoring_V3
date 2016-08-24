@@ -43,12 +43,7 @@ public class SplashScreen extends Activity {
 
 
 
-                SharedPreferences settings = getSharedPreferences(Constants.PREF_NAME, 0);
-                //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-                //   boolean hasParkingSelected_ = settings.getBoolean("hasParkingSelected", false);
-                boolean has_Logged_IN = settings.getBoolean("hasLoggedIn",false);
-                String Color = settings.getString("Header_Color","#000000");
-                String Aadhaar = settings.getString("Aadhaar_Number","000000000000");
+
 
 
 
@@ -65,23 +60,11 @@ public class SplashScreen extends Activity {
                     Splash_Screen_Activity.this.finish();
                 }*/
 
-                if(has_Logged_IN)
-                {
 
-                    //Parking_Details_Activity
-                    Intent mainIntent = new Intent(SplashScreen.this, Main_Navigation_Activity.class);
-                    mainIntent.putExtra("Color",  Color );
-                    SplashScreen.this.startActivity(mainIntent);
-                    SplashScreen.this.finish();
-
-
-
-                }else{
                     Intent login_Intent = new Intent(SplashScreen.this, Home.class); //Login_Activity
                     SplashScreen.this.startActivity(login_Intent);
                     SplashScreen.this.finish();
 
-                }
 
 
 

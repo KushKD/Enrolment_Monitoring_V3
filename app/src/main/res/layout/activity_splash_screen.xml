@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/ss"
+    android:background="#f2f2f2"
     android:weightSum="3">
 
     <!-- ImageView -->
@@ -19,6 +19,13 @@
         android:gravity="right|center_vertical|center_horizontal"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ditlogo">
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -26,25 +33,28 @@
         android:id="@+id/laydetails"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:orientation="vertical"
         android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical"
         android:layout_weight="2" >
 
-        <LinearLayout
+        <TextView
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/center_logo_aadhaar">
 
-        </LinearLayout>
+        </TextView>
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enrolment Reporting"
-            android:layout_margin="10dp"
-            android:textColor="#d52736"
-            android:textStyle="bold"
-            android:textSize="24dp"/>
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="Enrolment Monitoring"
+            android:textSize="20sp"/>
+
 
     </LinearLayout>
 
@@ -55,9 +65,16 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight=".5"
-        android:orientation="vertical"
         android:gravity="right|center_horizontal|center_vertical"
         >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:text="\u00A9 2016 Department Of Information Technology Himachal Pradesh"
+            android:textSize="16sp"/>
     </LinearLayout>
 
 </LinearLayout>

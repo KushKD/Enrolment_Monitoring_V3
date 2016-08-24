@@ -16,8 +16,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-
-        <service android:name=".GPS_Service" android:process=":GET_GPS" />
+        <service
+            android:name=".GPS_Service"
+            android:process=":GET_GPS" />
 
         <activity
             android:name=".SplashScreen"
@@ -38,6 +39,12 @@
             android:alwaysRetainTaskState="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Login2"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home"
             android:label="@string/title_activity_home"
@@ -46,6 +53,14 @@
         <activity
             android:name=".Main_Navigation_Activity"
             android:label="@string/title_activity_main__navigation_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SRDH_Search_Screen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".AdvancedListFive"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".UserDetailsSearch"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
