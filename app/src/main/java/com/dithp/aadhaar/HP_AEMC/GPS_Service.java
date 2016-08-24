@@ -3,6 +3,7 @@ package com.dithp.aadhaar.HP_AEMC;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -18,16 +20,27 @@ import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.dithp.aadhaar.Enum.TaskType;
 import com.dithp.aadhaar.HelperFunctions.AppStatus;
 import com.dithp.aadhaar.HelperFunctions.Date_Time;
+import com.dithp.aadhaar.Modals.Location_Operator;
 import com.dithp.aadhaar.Utils.Constants;
+import com.dithp.aadhaar.Utils.Generic_Async_Post;
 
+import org.json.JSONException;
+import org.json.JSONStringer;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,8 +51,13 @@ import java.util.TimerTask;
 public class GPS_Service extends Service {
     private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 10800000;  //10800000
+    private static final int LOCATION_INTERVAL = 5400000;  //10800000   //current Two minutes
     private static final float LOCATION_DISTANCE = 0;
+
+    Location_Operator LO = null;
+    URL url_;
+    HttpURLConnection conn_;
+    StringBuilder sb = null;
 
 
 
@@ -60,12 +78,17 @@ public class GPS_Service extends Service {
           //  Log.e("Latitude", Double.toString(location.getLatitude()));
           //  Log.e("Longitude",Double.toString(location.getLongitude()));
 
+            try{
+                sendDataToServer(location);
+            }catch (Exception e){
+                Log.e("Error",e.getLocalizedMessage().toString().trim());
+            }
 
             //send the data to server here at specific time
            /* final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {*/
-                    sendDataToServer(location);
+
                  /*   handler.postDelayed(this, 120000); //now is every 2 minutes
                 }
             }, 120000); //Every 120000 ms (2 minutes)*/
@@ -92,7 +115,7 @@ public class GPS_Service extends Service {
 
         //Check the Time and send send data at specific time
 
-        if(AppStatus.getInstance(GPS_Service.this).isOnline()) {
+
 
 
 
@@ -109,6 +132,11 @@ public class GPS_Service extends Service {
             Log.e("Date Time inside Timer", Date_Time.Datetime());
             Log.e("Aadhaar Number", Aadhaar);
 
+            LO = new Location_Operator();
+            LO.setAadhaar_Operator(Aadhaar);
+            LO.setDate_Time(Date_Time.Datetime());
+            LO.setLatitude(Double.toString(location.getLatitude()));
+            LO.setLongitude(Double.toString(location.getLongitude()));
             try {
 
                 File root = new File(Environment.getExternalStorageDirectory(), "Notes");
@@ -116,24 +144,29 @@ public class GPS_Service extends Service {
 
                 File filepath = new File(root, "GPS_LOG.txt");  // file path to save
                 FileWriter writer = new FileWriter(filepath, true);
-                writer.append("\n\n"+ Double.toString(location.getLatitude())+"\t"+Double.toString(location.getLongitude())+"\t"+Date_Time.Datetime() + "\t"+ Aadhaar);
+                writer.append("\n\n"+ LO.getLatitude()+"\t"+LO.getLongitude()+"\t"+LO.getDate_Time()+ "\t"+ LO.getAadhaar_Operator());
                 writer.flush();
                 writer.close();
                 String m = "File generated with name GPS_LOG.txt";
                // result.setText(m);
                 Log.e("File Created",m);
+              //  new Generic_Async_Post(GPS_Service.this, Main_Navigation_Activity.this, TaskType.SAVEDATA).execute(aadhaar_operator);
+                if(AppStatus.getInstance(GPS_Service.this).isOnline()) {
+                LocationUpdates LU = new LocationUpdates();
+                LU.execute(LO);
+                }else{
+                    Log.e("Error and More Error","Internet not available.");
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("File Created",e.getLocalizedMessage().toString());
             }
-          //   "\n\n"+ Double.toString(location.getLatitude())+"\t"+Double.toString(location.getLongitude())+"\t"+Date_Time.Datetime() + "\t"+ Aadhaar
 
 
 
-        }else{
-            Log.e("Error and More Error","Internet not available.");
-        }
+
           }
 
     LocationListener[] mLocationListeners = new LocationListener[]{
@@ -209,6 +242,92 @@ public class GPS_Service extends Service {
         if (mLocationManager == null) {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
+        }
+    }
+
+    public class LocationUpdates extends AsyncTask<Object,String,String>{
+
+        Location_Operator LO_Server = null;
+        JSONStringer userJson = null;
+        private ProgressDialog dialog;
+
+        String url = null;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Object... params) {
+            LO_Server = (Location_Operator)params[0];
+
+            try {
+                url_ =new URL(Constants.BASE_URL+"locationsave");
+                conn_ = (HttpURLConnection)url_.openConnection();
+                conn_.setDoOutput(true);
+                conn_.setRequestMethod("POST");
+                conn_.setUseCaches(false);
+                conn_.setConnectTimeout(10000);
+                conn_.setReadTimeout(10000);
+                conn_.setRequestProperty("Content-Type", "application/json");
+                conn_.connect();
+
+                userJson = new JSONStringer()
+                        .object().key("location_operator")
+                        .object()
+                        .key("Aadhaar").value(LO_Server.Aadhaar_Operator)
+                        .key("Date_n_Time").value(LO_Server.Date_Time)
+                        .key("Latitude").value(LO_Server.getLatitude())
+                        .key("Longitude").value(LO_Server.getLongitude())
+                        .endObject()
+                        .endObject();
+
+
+                System.out.println(userJson.toString());
+                Log.e("Object",userJson.toString());
+                OutputStreamWriter out = new OutputStreamWriter(conn_.getOutputStream());
+                out.write(userJson.toString());
+                out.close();
+
+                try{
+                    int HttpResult =conn_.getResponseCode();
+                    if(HttpResult == HttpURLConnection.HTTP_OK){
+
+                        sb= new StringBuilder();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(conn_.getInputStream(),"utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line + "\n");
+                        }
+                        br.close();
+                        System.out.println(sb.toString());
+
+                    }else{
+                        System.out.println("Server Connection failed.");
+                    }
+
+                } catch(Exception e){
+                    return "Server Connection failed.";
+                }
+
+            }
+            catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally{
+                if(conn_!=null)
+                    conn_.disconnect();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Message",s);
         }
     }
 

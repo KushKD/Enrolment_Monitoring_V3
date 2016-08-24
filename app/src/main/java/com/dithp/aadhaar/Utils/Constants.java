@@ -16,6 +16,7 @@ public class Constants {
     public static final String DATASENT = "Details Sent Succcessfully";
     //public static final String URL_BASE = "http://hp.gov.in/uidreport/AWW.svc/saveDetails";
     public static final String URL_BASE = "http://10.241.9.72/awwservicelatest/AWW.svc/saveDetails";
+    public static final String BASE_URL = "http://10.241.9.72/awwservicelatest/AWW.svc/";
     public static final String JSON_Save = "Save_AWW_DetailsResult";
     public static final String JSON_OTP = "CheckOTPResult";
     public static final String JSON_LOGIN = "LoginResult";
