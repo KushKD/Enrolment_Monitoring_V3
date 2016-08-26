@@ -51,7 +51,7 @@ import java.util.TimerTask;
 public class GPS_Service extends Service {
     private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 5400000;  //10800000   //current Two minutes
+    private static final int LOCATION_INTERVAL = 1800000;  //1800000 //10800000  5400000 //12000 //current Two minutes
     private static final float LOCATION_DISTANCE = 0;
 
     Location_Operator LO = null;
@@ -137,37 +137,28 @@ public class GPS_Service extends Service {
             LO.setDate_Time(Date_Time.Datetime());
             LO.setLatitude(Double.toString(location.getLatitude()));
             LO.setLongitude(Double.toString(location.getLongitude()));
-            try {
 
-                File root = new File(Environment.getExternalStorageDirectory(), "Notes");
-                // if external memory exists and folder with name Notes
+        File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+        // if external memory exists and folder with name Notes
 
-                File filepath = new File(root, "GPS_LOG.txt");  // file path to save
+               /* File filepath = new File(root, "GPS_LOG.txt");  // file path to save
                 FileWriter writer = new FileWriter(filepath, true);
                 writer.append("\n\n"+ LO.getLatitude()+"\t"+LO.getLongitude()+"\t"+LO.getDate_Time()+ "\t"+ LO.getAadhaar_Operator());
                 writer.flush();
                 writer.close();
                 String m = "File generated with name GPS_LOG.txt";
                // result.setText(m);
-                Log.e("File Created",m);
-              //  new Generic_Async_Post(GPS_Service.this, Main_Navigation_Activity.this, TaskType.SAVEDATA).execute(aadhaar_operator);
-                if(AppStatus.getInstance(GPS_Service.this).isOnline()) {
-                LocationUpdates LU = new LocationUpdates();
-                LU.execute(LO);
-                }else{
-                    Log.e("Error and More Error","Internet not available.");
-                }
+                Log.e("File Created",m);*/
+        //  new Generic_Async_Post(GPS_Service.this, Main_Navigation_Activity.this, TaskType.SAVEDATA).execute(aadhaar_operator);
+        if(AppStatus.getInstance(GPS_Service.this).isOnline()) {
+        LocationUpdates LU = new LocationUpdates();
+        LU.execute(LO);
+        }else{
+            Log.e("Error and More Error","Internet not available.");
+        }
 
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e("File Created",e.getLocalizedMessage().toString());
-            }
-
-
-
-
-          }
+    }
 
     LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
